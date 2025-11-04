@@ -3,7 +3,6 @@ const User = require('./schemas/user');
 const express = require('express');
 const cors = require('cors');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-const rateLimit = require('express-rate-limit');
 const app = express();
 
 require('dotenv').config();
@@ -22,16 +21,6 @@ const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 mongoose.connect(MONGO_URI)
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('MongoDB connection error:', err));
-
-const limiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 10 minutes
-    max: 10, // Limit each IP to 10 requests per windowMs
-    message: {
-        error: 'Too many requests from this IP, please try again after 10 minutes.',
-    },
-    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-});
 
 async function generateWithGemini(username) {
     let survivePrompt = ""
@@ -106,7 +95,7 @@ function splitByFullStops(text) {
     return text.split('.').map(line => line.trim()).filter(line => line.length > 0);
 }
 
-app.post('/api/user', limiter, async (req, res) => {
+app.post('/api/user', async (req, res) => {
     try {
         let { username } = req.body;
 
