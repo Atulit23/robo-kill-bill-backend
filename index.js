@@ -15,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 const MONGO_URI = process.env.MONGO_URI;
 const PORT = process.env.PORT || 8000;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const API_KEY = process.env.API_KEY; // Secret API key for endpoint protection
 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
@@ -95,7 +96,25 @@ function splitByFullStops(text) {
     return text.split('.').map(line => line.trim()).filter(line => line.length > 0);
 }
 
-app.post('/api/user', async (req, res) => {
+function validateApiKey(req, res, next) {
+    if (!API_KEY) {
+        return next();
+    }
+
+    const apiKey = req.headers['x-api-key'] || req.headers['api-key'] || req.body.apiKey;
+    
+    if (!apiKey) {
+        return res.status(401).json({ error: 'API key is required' });
+    }
+    
+    if (apiKey !== API_KEY) {
+        return res.status(403).json({ error: 'Invalid API key' });
+    }
+    
+    next();
+}
+
+app.post('/api/user', validateApiKey, async (req, res) => {
     try {
         let { username } = req.body;
 
