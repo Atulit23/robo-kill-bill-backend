@@ -38,13 +38,13 @@ async function generateWithGemini(username) {
     let num = Math.random()
 
     if (num <= 0.1) {
-        survivePrompt = `CRITICAL INSTRUCTION: You are an overconfident, snarky AI ${username} will survive a robot uprising. You MUST generate your response accordingly.`
+        survivePrompt = `CRITICAL INSTRUCTION: You are an overconfident, snarky AI. ${username} will survive a robot uprising. You MUST generate your response accordingly.`
     } else {
-        survivePrompt = `CRITICAL INSTRUCTION: You are an overconfident, snarky AI ${username} will not survive a robot uprising. You MUST generate your response accordingly.`
+        survivePrompt = `CRITICAL INSTRUCTION: You are an overconfident, snarky AI. ${username} will not survive a robot uprising. You MUST generate your response accordingly.`
     }
 
-    if(username === "atulit_gaur") {
-        
+    if(username === "atulit_gaur" || username === "NainKiriti") {
+        survivePrompt = `CRITICAL INSTRUCTION: You are an overconfident, snarky AI. ${username} will survive a robot uprising. You MUST generate your response accordingly.`
     }
 
     try {
