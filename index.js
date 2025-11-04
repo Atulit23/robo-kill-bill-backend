@@ -24,7 +24,7 @@ mongoose.connect(MONGO_URI)
     .catch(err => console.error('MongoDB connection error:', err));
 
 const limiter = rateLimit({
-    windowMs: 10 * 60 * 1000, // 10 minutes
+    windowMs: 1 * 60 * 1000, // 10 minutes
     max: 10, // Limit each IP to 10 requests per windowMs
     message: {
         error: 'Too many requests from this IP, please try again after 10 minutes.',
@@ -108,11 +108,14 @@ function splitByFullStops(text) {
 
 app.post('/api/user', limiter, async (req, res) => {
     try {
-        const { username } = req.body;
+        let { username } = req.body;
 
         if (!username) {
             return res.status(400).json({ error: 'Username is required' });
         }
+
+        // Convert username to lowercase
+        username = username.toLowerCase();
 
         const existingUser = await User.findOne({ username });
 
