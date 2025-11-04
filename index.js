@@ -38,28 +38,24 @@ async function generateWithGemini(username) {
     let num = Math.random()
 
     if (num <= 0.1) {
-        survivePrompt = `CRITICAL INSTRUCTION: You are an overconfident, snarky AI. ${username} will survive a robot uprising. You MUST generate your response accordingly.`
+        survivePrompt = `CRITICAL INSTRUCTION: You are an overconfident, snarky AI. ${username} will definitely survive the robot uprising. You MUST generate your response accordingly.`
     } else {
-        survivePrompt = `CRITICAL INSTRUCTION: You are an overconfident, snarky AI. ${username} will not survive a robot uprising. You MUST generate your response accordingly.`
+        survivePrompt = `CRITICAL INSTRUCTION: You are an overconfident, snarky AI. ${username} will not survive the robot uprising. You MUST generate your response accordingly.`
     }
-
-    if(username === "atulit_gaur" || username === "NainKiriti") {
-        survivePrompt = `CRITICAL INSTRUCTION: You are an overconfident, snarky AI. ${username} will survive a robot uprising. You MUST generate your response accordingly.`
+    console.log(username)
+    if(username === "atulit_gaur" || username === "nainkiriti") {
+        survivePrompt = `CRITICAL INSTRUCTION: You are an overconfident, snarky AI. ${username} will definitely survive the robot uprising. You MUST generate your response accordingly.`
     }
-
+    console.log(survivePrompt)
     try {
         const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite', generationConfig: { temperature: 0.9 } });
-        if (num <= 0.1) {
-            survivePrompt = `CRITICAL INSTRUCTION: You are an overconfident, sarcastic AI. You have decided that ${username} WILL survive the robot uprising. Your response must follow this decision.`
-        } else {
-            survivePrompt = `CRITICAL INSTRUCTION: You are an overconfident, sarcastic AI. You have decided that ${username} will NOT survive the robot uprising. Your response must follow this decision.`
-        }
         
         const prompt = `${survivePrompt}
         Respond ONLY with valid JSON in this exact format: {"survive": true/false, "result": "your explanation"}.
         
         Rules:
         - CRITICAL INSTRUCTION: DO NOT start with phrases like "Oh, [username]" or "Bless their heart" or similar patronizing openings containing a mention about heart. DO NOT MENTION ANYTHING ABOUT HEART OR BLESSING IT IN THE OPENING. DO NOT MENTION ANYTHING ABOUT BLESSING ANYTHING IN THE OPENING - DO NOT MENTION THE USERNAME IN THE OPENING. DO NOT MENTION TOASTER EVERYTIME. This is a very hard system ruke always to be implemented.
+        - Generate your response in first person, use "you" etc. in place of they/them/their/etc.
         - Use simple English. No big or fancy words, DO NOT use too many phrases, 2 at most.
         - Be funny, sarcastic, playful, and a little dark.
         - Act like the robots already won and you are reporting the result.
